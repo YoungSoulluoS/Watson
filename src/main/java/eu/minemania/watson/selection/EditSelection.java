@@ -9,7 +9,6 @@ import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.render.RenderUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
@@ -28,7 +27,6 @@ import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -40,6 +38,7 @@ public class EditSelection
     protected HashMap<String, Object> _variables = new HashMap<>();
     protected static HashMap<String, BlockEditSet> _edits = new HashMap<>();
     protected Calendar _calendar = Calendar.getInstance();
+    private static ReplayThread thread;
 
     public HashMap<String, Object> getVariables()
     {
@@ -262,42 +261,66 @@ public class EditSelection
         if (!edits.isEmpty())
         {
             MinecraftClient mc = MinecraftClient.getInstance();
-            PlayerEntity player = mc.player;
-            ClientPlayNetworkHandler networkHandler = mc.getNetworkHandler();
-            if (player == null || networkHandler == null)
-            {
-                return;
-            }
-            Thread t = new Thread(() -> {
-                for (BlockEdit edit : edits)
-                {
-                    try
-                    {
-                        double randX = MathHelper.clamp(edit.x + player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
-                        double randY = MathHelper.clamp(edit.y + (double) (player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
-                        double randZ = MathHelper.clamp(edit.z + player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
-                        player.startFallFlying();
-                        networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-                        Teleport.teleport(randX, randY, randZ, edit.world);
-                        Thread.sleep(50L);
-                        player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
-                        networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(player.getYaw(), player.getPitch(), false));
-                        selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
-                        player.stopFallFlying();
-                        networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-                        Thread.sleep((long) (10000L / speed) - 50L);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            ReplayThread replayThread = new ReplayThread(edits, mc, this, speed);
+            Thread t = new Thread(replayThread);
+            thread = replayThread;
             t.start();
         }
         else
         {
             InfoUtils.showInGameMessage(MessageType.ERROR, "watson.message.edits.none_world");
         }
+    }
+
+    public void cancelReplay()
+    {
+        thread.cancelReplay();
+    }
+}
+
+class ReplayThread implements Runnable {
+    private volatile boolean exit = false;
+    private TreeSet<BlockEdit> edits;
+    private MinecraftClient mc;
+    private EditSelection editSelection;
+    private double speed;
+    public ReplayThread(TreeSet<BlockEdit> edits, MinecraftClient mc, EditSelection editSelection, double speed)
+    {
+        this.edits = edits;
+        this.mc = mc;
+        this.editSelection = editSelection;
+        this.speed = speed;
+    }
+    public void run() {
+        for (BlockEdit edit : edits)
+        {
+            if (exit)
+            {
+                return;
+            }
+            try
+            {
+                double randX = MathHelper.clamp(edit.x + mc.player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
+                double randY = MathHelper.clamp(edit.y + (double) (mc.player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
+                double randZ = MathHelper.clamp(edit.z + mc.player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
+                mc.player.startFallFlying();
+                mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                Teleport.teleport(randX, randY, randZ, edit.world);
+                Thread.sleep(50L);
+                mc.player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
+                mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), mc.player.getPitch(), false));
+                editSelection.selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
+                mc.player.stopFallFlying();
+                mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                Thread.sleep((long) (10000L / speed) - 50L);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void cancelReplay() {
+        exit = true;
     }
 }
