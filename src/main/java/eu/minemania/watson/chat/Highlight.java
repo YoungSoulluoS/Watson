@@ -104,7 +104,7 @@ public class Highlight
         final int[] i = {0};
         ClientPlayerEntity player = mc.player;
         String serverBrand;
-        if (player != null && !player.getServerBrand().isEmpty())
+        if (player != null && player.getServerBrand() != null && !player.getServerBrand().isEmpty())
         {
             serverBrand = player.getServerBrand().toLowerCase();
         }

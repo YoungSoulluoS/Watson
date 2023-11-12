@@ -29,28 +29,27 @@ public abstract class MixinChatHud
             return componentln;
         }
         boolean allowChat = ChatProcessor.getInstance().onChat((MutableText) componentln);
-        if (allowChat)
-        {
-            if (Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue())
-            {
-                if (componentln instanceof TranslatableText)
-                {
-                    if (((TranslatableText) componentln).getKey().contains("chat.type.text"))
-                    {
-                        return Highlight.setHighlightChatMessage(((TranslatableText) componentln).getKey(), (MutableText) componentln, false);
-                    }
-                }
-                else
-                {
-                    return Highlight.setHighlightChatMessage((MutableText) componentln);
-                }
-            }
-        }
-        else
+        if (!allowChat)
         {
             delete = true;
+
+            return componentln;
         }
-        return componentln;
+        if (!Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue())
+        {
+            return componentln;
+        }
+        if (componentln instanceof TranslatableText)
+        {
+            if (((TranslatableText)componentln).getKey().contains("chat.type.text"))
+            {
+                return Highlight.setHighlightChatMessage(((TranslatableText) componentln).getKey(), (MutableText) componentln, false);
+            }
+
+            return componentln;
+        }
+
+        return Highlight.setHighlightChatMessage((MutableText) componentln);
     }
 
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"), cancellable = true)

@@ -9,7 +9,7 @@ import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.render.RenderUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -125,7 +125,7 @@ public class EditSelection
         return edits;
     }
 
-    public void drawSelection(MatrixStack matrixStack)
+    public void drawSelection()
     {
         if (_selection != null && Configs.Edits.SELECTION_SHOWN.getBooleanValue() && (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(_selection.world)))
         {
@@ -261,6 +261,12 @@ public class EditSelection
         if (!edits.isEmpty())
         {
             MinecraftClient mc = MinecraftClient.getInstance();
+            PlayerEntity player = mc.player;
+            ClientPlayNetworkHandler networkHandler = mc.getNetworkHandler();
+            if (player == null || networkHandler == null)
+            {
+                return;
+            }
             ReplayThread replayThread = new ReplayThread(edits, mc, this, speed);
             Thread t = new Thread(replayThread);
             thread = replayThread;
@@ -280,10 +286,10 @@ public class EditSelection
 
 class ReplayThread implements Runnable {
     private volatile boolean exit = false;
-    private TreeSet<BlockEdit> edits;
-    private MinecraftClient mc;
-    private EditSelection editSelection;
-    private double speed;
+    private final TreeSet<BlockEdit> edits;
+    private final MinecraftClient mc;
+    private final EditSelection editSelection;
+    private final double speed;
     public ReplayThread(TreeSet<BlockEdit> edits, MinecraftClient mc, EditSelection editSelection, double speed)
     {
         this.edits = edits;
@@ -300,18 +306,20 @@ class ReplayThread implements Runnable {
             }
             try
             {
-                double randX = MathHelper.clamp(edit.x + mc.player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
-                double randY = MathHelper.clamp(edit.y + (double) (mc.player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
-                double randZ = MathHelper.clamp(edit.z + mc.player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
-                mc.player.startFallFlying();
-                mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                PlayerEntity player = mc.player;
+                ClientPlayNetworkHandler networkHandler = mc.getNetworkHandler();
+                double randX = MathHelper.clamp(edit.x + player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
+                double randY = MathHelper.clamp(edit.y + (double) (player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
+                double randZ = MathHelper.clamp(edit.z + player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
+                player.startFallFlying();
+                networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                 Teleport.teleport(randX, randY, randZ, edit.world);
                 Thread.sleep(50L);
-                mc.player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
-                mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), mc.player.getPitch(), false));
+                player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
+                networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(player.getYaw(), player.getPitch(), false));
                 editSelection.selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
-                mc.player.stopFallFlying();
-                mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                player.stopFallFlying();
+                networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                 Thread.sleep((long) (10000L / speed) - 50L);
             }
             catch (InterruptedException e)
