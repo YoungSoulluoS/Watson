@@ -76,6 +76,9 @@ modrinth {
 	gameVersions = [project.minecraft_version]
 	loaders = loadersResult
 	uploadFile = remapJar
+	dependencies {
+		required.project "malilib"
+	}
 	debugMode = project.modrinth_debug.toBoolean()
 }
 
