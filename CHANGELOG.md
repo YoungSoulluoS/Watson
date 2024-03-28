@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Backported some features
 
+### Fixed
+
+- Fix BlockEditComparator
+- Fix regexes
+
 ## [1.14.6+1.19.4] - 2023-04-15
 
 ### Added
