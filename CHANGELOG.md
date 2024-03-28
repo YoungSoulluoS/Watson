@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.3+1.20.2] - 2024-03-29
+
+### Fixed
+
+- Fix BlockEditComparator
+- Fix regexes
+
 ## [1.15.2+1.20.2] - 2023-11-05
 
 ### Added
