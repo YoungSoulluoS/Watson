@@ -348,7 +348,6 @@ public class Configs implements IConfigHandler
             DEFAULT_COLORS.put(Items.COAL_ORE, "#CC191611");
             DEFAULT_COLORS.put(Items.EMERALD_ORE, "#CC17DD62");
             DEFAULT_COLORS.put(Items.NETHER_QUARTZ_ORE, "#CCEBE9E3");
-
             DEFAULT_COLORS.put(Items.ANCIENT_DEBRIS, "#CC332120");
             DEFAULT_COLORS.put(Items.GILDED_BLACKSTONE, "#CCFCEE4B");
             DEFAULT_COLORS.put(Items.NETHER_GOLD_ORE, "#CCFCEE4B");
