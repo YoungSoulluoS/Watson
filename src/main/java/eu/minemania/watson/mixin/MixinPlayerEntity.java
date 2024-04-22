@@ -1,5 +1,6 @@
 package eu.minemania.watson.mixin;
 
+import net.minecraft.scoreboard.Team;
 import net.minecraft.text.MutableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,7 +12,6 @@ import eu.minemania.watson.chat.Highlight;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.scoreboard.AbstractTeam;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -26,8 +26,8 @@ public abstract class MixinPlayerEntity extends LivingEntity
         super(EntityType.PLAYER, world);
     }
 
-    @Redirect(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getScoreboardTeam()Lnet/minecraft/scoreboard/AbstractTeam;"))
-    private AbstractTeam getCustomScoreboardTeam(PlayerEntity player)
+    @Redirect(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getScoreboardTeam()Lnet/minecraft/scoreboard/Team;"))
+    private Team getCustomScoreboardTeam(PlayerEntity player)
     {
         if (Highlight.changeUsername)
         {
