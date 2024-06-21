@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.LedgerInfo;
 import eu.minemania.watson.gui.GuiLedger.ButtonListenerCycleTypePacket.LedgerMode;
+import eu.minemania.watson.gui.GuiLedger.ButtonListenerRolledback.RolledbackMode;
 import eu.minemania.watson.network.ledger.PluginInspectPacketHandler;
 import eu.minemania.watson.network.ledger.PluginPurgePacketHandler;
 import eu.minemania.watson.network.ledger.PluginRollbackPacketHandler;
@@ -36,7 +37,7 @@ public class GuiLedger extends GuiBase
     protected GuiTextFieldInteger textFieldY;
     protected GuiTextFieldInteger textFieldZ;
     protected GuiTextFieldInteger textFieldPages;
-    protected LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
+    protected LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10, RolledbackMode.IGNORED);
 
     protected GuiLedger()
     {
@@ -190,6 +191,20 @@ public class GuiLedger extends GuiBase
             this.textFieldPages = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
             this.textFieldPages.setText(String.valueOf(ledgerInfo.getPages()));
             this.addTextField(this.textFieldPages, new PagesTextFieldListener(this));
+        }
+
+        if (ledgerInfo.getLedgerMode() == LedgerMode.SEARCH)
+        {
+            y += 30;
+
+            label = StringUtils.translate("watson.gui.label.ledger.title.rolledback"); //Rolledback
+            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 4;
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.rolledback"));
+
+            label = StringUtils.translate("watson.gui.button.ledger.rolledback", ledgerInfo.getRolledBack().getDisplayName());
+            button = new ButtonGeneric(x + offset + 20, y, buttonWidth, 20, label);
+            this.addButton(button, new ButtonListenerRolledback(this));
         }
 
         y = this.height - 50;
@@ -471,14 +486,15 @@ public class GuiLedger extends GuiBase
         int z = this.ledgerInfo.getZ();
         LedgerMode ledgerMode = this.ledgerInfo.getLedgerMode();
         int pages = this.ledgerInfo.getPages();
+        RolledbackMode rolledBack = this.ledgerInfo.getRolledBack();
 
-        LedgerInfo ledgerInfo = new LedgerInfo(actions, blocks, dimension, entityTypes, items, tags, source, timeBefore, timeAfter, range, x, y, z, ledgerMode, pages);
+        LedgerInfo ledgerInfo = new LedgerInfo(actions, blocks, dimension, entityTypes, items, tags, source, timeBefore, timeAfter, range, x, y, z, ledgerMode, pages, rolledBack);
         DataManager.setLedgerInfo(ledgerInfo);
     }
 
     private void clearLedgerInfo()
     {
-        LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
+        LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10, RolledbackMode.IGNORED);
         this.ledgerInfo = ledgerInfo;
         DataManager.setLedgerInfo(ledgerInfo);
     }
@@ -938,6 +954,7 @@ public class GuiLedger extends GuiBase
                 int y = ledgerInfo.getY();
                 int z = ledgerInfo.getZ();
                 int pages = ledgerInfo.getPages();
+                RolledbackMode rolledBack = ledgerInfo.getRolledBack();
                 MinecraftClient mc = parent.mc;
 
                 switch (ledgerInfo.getLedgerMode())
@@ -946,7 +963,7 @@ public class GuiLedger extends GuiBase
                     case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, mc);
                     case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, false, mc);
                     case RESTORE -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, true, mc);
-                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, pages, mc);
+                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, pages, rolledBack, mc);
                 }
             }
         }
@@ -1019,6 +1036,70 @@ public class GuiLedger extends GuiBase
             }
 
             public LedgerMode cycle(boolean forward)
+            {
+                int id = this.ordinal();
+
+                if (forward)
+                {
+                    if (++id >= values().length)
+                    {
+                        id = 0;
+                    }
+                }
+                else
+                {
+                    if (--id < 0)
+                    {
+                        id = values().length - 1;
+                    }
+                }
+
+                return values()[id % values().length];
+            }
+        }
+    }
+
+    public static class ButtonListenerRolledback implements IButtonActionListener
+    {
+        private final GuiLedger parent;
+
+        public ButtonListenerRolledback(GuiLedger parent)
+        {
+            this.parent = parent;
+        }
+
+        @Override
+        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
+        {
+            RolledbackMode mode = parent.ledgerInfo.getRolledBack().cycle(mouseButton == 0);
+            parent.ledgerInfo.setRolledBack(mode);
+            parent.initGui();
+        }
+
+        public enum RolledbackMode
+        {
+            ON("watson.gui.button.ledger.rolledback.on"),
+            OFF("watson.gui.button.ledger.rolledback.off"),
+            IGNORED("watson.gui.button.ledger.rolledback.ignored");
+
+            private final String labelKey;
+
+            RolledbackMode(String labelKey)
+            {
+                this.labelKey = labelKey;
+            }
+
+            public String getLabelKey()
+            {
+                return this.labelKey;
+            }
+
+            public String getDisplayName()
+            {
+                return StringUtils.translate(this.getLabelKey());
+            }
+
+            public RolledbackMode cycle(boolean forward)
             {
                 int id = this.ordinal();
 

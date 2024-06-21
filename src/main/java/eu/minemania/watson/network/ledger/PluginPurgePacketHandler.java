@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.LedgerSearch;
+import eu.minemania.watson.gui.GuiLedger.ButtonListenerRolledback.RolledbackMode;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -28,7 +29,7 @@ public class PluginPurgePacketHandler
             {
                 return;
             }
-            LedgerSearch ledgerSearch = new LedgerSearch(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter);
+            LedgerSearch ledgerSearch = new LedgerSearch(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, RolledbackMode.IGNORED);
             PacketByteBuf packetByteBuf = new PacketByteBuf(Unpooled.buffer());
             packetByteBuf.writeString(ledgerSearch.getSearchData());
             if(Configs.Generic.DEBUG.getBooleanValue())

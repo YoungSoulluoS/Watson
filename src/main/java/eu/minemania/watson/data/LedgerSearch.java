@@ -1,5 +1,6 @@
 package eu.minemania.watson.data;
 
+import eu.minemania.watson.gui.GuiLedger.ButtonListenerRolledback.RolledbackMode;
 import java.util.List;
 
 public class LedgerSearch
@@ -14,8 +15,9 @@ public class LedgerSearch
     private final String sources;
     private final String timeBefore;
     private final String timeAfter;
+    private final String rolledBack;
 
-    public LedgerSearch(List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, List<String> tag, int range, String source, String timeBefore, String timeAfter)
+    public LedgerSearch(List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, List<String> tag, int range, String source, String timeBefore, String timeAfter, RolledbackMode rolledBack)
     {
         this.actions = setTypeList("action",actions);
         this.dimensions = setTypeList("world", dimension);
@@ -27,6 +29,14 @@ public class LedgerSearch
         this.sources = setTypeString("source", source);
         this.timeBefore = setTypeString("before", timeBefore);
         this.timeAfter = setTypeString("after", timeAfter);
+        if (rolledBack == RolledbackMode.IGNORED)
+        {
+            this.rolledBack = "";
+        }
+        else
+        {
+            this.rolledBack = setTypeString("rolledback", rolledBack == RolledbackMode.ON ? "true" : "false");
+        }
     }
 
     private String setTypeString(String type, String parameterContent)
@@ -120,6 +130,11 @@ public class LedgerSearch
         return timeBefore;
     }
 
+    public String getRolledBack()
+    {
+        return rolledBack;
+    }
+
     public String getSearchData()
     {
         StringBuilder search = new StringBuilder();
@@ -172,6 +187,10 @@ public class LedgerSearch
         {
             search.append(timeBefore);
             search.append(" ");
+        }
+        if (!rolledBack.isEmpty())
+        {
+            search.append(rolledBack);
         }
         return search.toString().strip();
     }

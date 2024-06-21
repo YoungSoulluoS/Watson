@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.5+1.20.4] - 2024-06-21
+
+### Added
+
+- Support Ledger 1.3.0
+
 ## [1.15.4+1.20.4] - 2024-04-22
 
 ### Added

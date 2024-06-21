@@ -1,6 +1,7 @@
 package eu.minemania.watson.db;
 
 import eu.minemania.watson.gui.GuiLedger.ButtonListenerCycleTypePacket.LedgerMode;
+import eu.minemania.watson.gui.GuiLedger.ButtonListenerRolledback.RolledbackMode;
 
 import java.util.List;
 
@@ -21,8 +22,9 @@ public class LedgerInfo
     private int z;
     private LedgerMode ledgerMode;
     private int pages;
+    private RolledbackMode rolledBack;
 
-    public LedgerInfo(List<String> actions, List<String> blocks, List<String> dimensions, List<String> entityTypes, List<String> items, List<String> tags, String sources, String timeBefore, String timeAfter, int range, int x, int y, int z, LedgerMode ledgerMode, int pages)
+    public LedgerInfo(List<String> actions, List<String> blocks, List<String> dimensions, List<String> entityTypes, List<String> items, List<String> tags, String sources, String timeBefore, String timeAfter, int range, int x, int y, int z, LedgerMode ledgerMode, int pages, RolledbackMode rolledBack)
     {
         this.actions = actions;
         this.blocks = blocks;
@@ -39,6 +41,7 @@ public class LedgerInfo
         this.z = z;
         this.ledgerMode = ledgerMode;
         this.pages = pages;
+        this.rolledBack = rolledBack;
     }
 
     public List<String> getActions()
@@ -189,5 +192,15 @@ public class LedgerInfo
     public void setPages(int pages)
     {
         this.pages = pages;
+    }
+
+    public RolledbackMode getRolledBack()
+    {
+        return rolledBack;
+    }
+
+    public void setRolledBack(RolledbackMode rolledBack)
+    {
+        this.rolledBack = rolledBack;
     }
 }

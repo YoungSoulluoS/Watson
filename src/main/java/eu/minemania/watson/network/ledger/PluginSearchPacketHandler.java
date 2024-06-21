@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.LedgerSearch;
+import eu.minemania.watson.gui.GuiLedger.ButtonListenerRolledback.RolledbackMode;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -19,11 +20,11 @@ public class PluginSearchPacketHandler
 
     public static final PluginSearchPacketHandler INSTANCE = new PluginSearchPacketHandler();
 
-    public void sendPacket(List<String> action, List<String> dimension, List<String> block, List<String> entityType, List<String> item, List<String> tag, int range, String source, String timeBefore, String timeAfter, int pages, MinecraftClient mc)
+    public void sendPacket(List<String> action, List<String> dimension, List<String> block, List<String> entityType, List<String> item, List<String> tag, int range, String source, String timeBefore, String timeAfter, int pages, RolledbackMode rolledBack, MinecraftClient mc)
     {
         try
         {
-            LedgerSearch ledgerSearch = new LedgerSearch(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter);
+            LedgerSearch ledgerSearch = new LedgerSearch(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, rolledBack);
             ClientPlayNetworkHandler packetHandler = mc.getNetworkHandler();
             if (packetHandler == null)
             {
@@ -47,6 +48,7 @@ public class PluginSearchPacketHandler
                 Watson.logger.info("timeAfter: "+ledgerSearch.getTimeAfter());
                 Watson.logger.info("search: "+ledgerSearch.getSearchData());
                 Watson.logger.info("pages: "+ pages);
+                Watson.logger.info("rolledBack: "+ ledgerSearch.getRolledBack());
                 Watson.logger.info(CHANNEL);
             }
             ClientPlayNetworking.send(CHANNEL, packetByteBuf);
