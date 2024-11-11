@@ -1,5 +1,6 @@
 package eu.minemania.watson.network;
 
+/*
 import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
@@ -9,7 +10,7 @@ import net.minecraft.util.Identifier;
 
 public class PluginWorldPacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final Identifier CHANNEL = new Identifier("watson:world");
+    public static final Identifier CHANNEL = Identifier.of("watson:world");
 
     public static final PluginWorldPacketHandler INSTANCE = new PluginWorldPacketHandler();
 
@@ -52,3 +53,4 @@ public class PluginWorldPacketHandler implements IPluginChannelHandlerExtended
         return null;
     }
 }
+*/

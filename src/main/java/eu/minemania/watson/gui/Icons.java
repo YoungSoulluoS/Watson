@@ -14,7 +14,7 @@ public enum Icons implements IGuiIcon
     FILE_ICON_SEARCH(0, 14, 12, 12),
     INFO_11(12, 14, 11, 11);
 
-    public static final Identifier TEXTURE = new Identifier(Reference.MOD_ID, "textures/gui/gui_widgets.png");
+    public static final Identifier TEXTURE = Identifier.of(Reference.MOD_ID, "textures/gui/gui_widgets.png");
 
     private final int u;
     private final int v;

@@ -17,6 +17,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.registry.Registries;
+import org.joml.Matrix4fStack;
 
 public class BlockEdit
 {
@@ -60,7 +61,7 @@ public class BlockEdit
         return this.additional;
     }
 
-    public Object drawOutline(BufferBuilder buffer, MatrixStack matrices)
+    public Object drawOutline(BufferBuilder buffer, Matrix4fStack matrices)
     {
         Block blocks = Registries.BLOCK.get(Identifier.tryParse(block.getName()));
         float lineWidth = block.getLineWidth();
@@ -81,7 +82,7 @@ public class BlockEdit
         return null;
     }
 
-    private void renderBlocks(BufferBuilder buffer, Block blocks, MatrixStack matrices)
+    private void renderBlocks(BufferBuilder buffer, Block blocks, Matrix4fStack matrices)
     {
         Color4f color = block.getOverrideColor() != Color4f.ZERO && block.getOverrideColor() != null ? block.getOverrideColor() : block.getColor();
         if (!block.getName().equals("minecraft:grass") && !block.getName().equals("minecraft:water") &&

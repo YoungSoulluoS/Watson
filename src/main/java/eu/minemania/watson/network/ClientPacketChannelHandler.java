@@ -1,6 +1,6 @@
 package eu.minemania.watson.network;
 
-import com.google.common.base.Charsets;
+/*import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.network.PacketByteBuf;
@@ -52,9 +52,9 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
         }
     }
 
-    /**
+    *//**
      * NOT PUBLIC API - DO NOT CALL
-     */
+     *//*
     public void processPacketFromClient()
     {
         for(Map.Entry<Identifier, IPluginChannelHandlerExtended> entry : this.handlers.entries())
@@ -76,4 +76,4 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
             }
         }
     }
-}
+}*/

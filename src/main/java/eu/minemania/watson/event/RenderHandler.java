@@ -16,12 +16,11 @@ public class RenderHandler implements IRenderer
     {
         return INSTANCE;
     }
-
+    
     @Override
-    public void onRenderWorldLast(MatrixStack matrixStack, Matrix4f projMatrix)
-    {
+    public void onRenderWorldLast(Matrix4f matrix4f, Matrix4f projMatrix) {
         MinecraftClient mc = MinecraftClient.getInstance();
-
+        
         if (Configs.Generic.ENABLED.getBooleanValue() && mc.world != null && mc.player != null)
         {
             OverlayRenderer.renderOverlays(mc);

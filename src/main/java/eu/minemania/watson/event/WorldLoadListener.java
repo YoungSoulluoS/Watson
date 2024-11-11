@@ -5,11 +5,11 @@ import javax.annotation.Nullable;
 import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
-import eu.minemania.watson.network.ClientPacketChannelHandler;
+/*import eu.minemania.watson.network.ClientPacketChannelHandler;
 import eu.minemania.watson.network.PluginWorldPacketHandler;
 import eu.minemania.watson.network.ledger.PluginActionPacketHandler;
 import eu.minemania.watson.network.ledger.PluginHandshakePacketHandler;
-import eu.minemania.watson.network.ledger.PluginResponsePacketHandler;
+import eu.minemania.watson.network.ledger.PluginResponsePacketHandler;*/
 import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.MinecraftClient;
@@ -26,14 +26,14 @@ public class WorldLoadListener implements IWorldLoadListener
             DataManager.save();
             if (worldAfter == null)
             {
-                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
+                /*ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginActionPacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginResponsePacketHandler.INSTANCE);
                 PluginWorldPacketHandler.INSTANCE.reset();
                 PluginHandshakePacketHandler.INSTANCE.reset();
                 PluginActionPacketHandler.INSTANCE.reset();
-                PluginResponsePacketHandler.INSTANCE.reset();
+                PluginResponsePacketHandler.INSTANCE.reset();*/
                 if (DataManager.getEditSelection().getSelection() != null)
                 {
                     DataManager.getEditSelection().clearBlockEditSet();
@@ -60,11 +60,11 @@ public class WorldLoadListener implements IWorldLoadListener
         if (worldBefore == null && worldAfter != null && Configs.Generic.ENABLED.getBooleanValue())
         {
             DataManager.onClientTickStart();
-            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
+            /*ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginActionPacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginResponsePacketHandler.INSTANCE);
-            ((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromClient();
+            ((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromClient();*/
         }
         if (worldAfter != null)
         {
