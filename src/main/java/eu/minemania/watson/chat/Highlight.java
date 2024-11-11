@@ -348,7 +348,7 @@ public class Highlight
                     String sound = Configs.Highlights.HIGHLIGHT_SOUND.getStringValue();
                     try
                     {
-                        SoundEvent soundEvent = Registries.SOUND_EVENT.get(new Identifier(sound));
+                        SoundEvent soundEvent = Registries.SOUND_EVENT.get(Identifier.of(sound));
                         float soundVolume = (float) Configs.Highlights.HIGHLIGHT_SOUND_VOLUME.getDoubleValue();
                         player.playSound(soundEvent, soundVolume, 1f);
                     }

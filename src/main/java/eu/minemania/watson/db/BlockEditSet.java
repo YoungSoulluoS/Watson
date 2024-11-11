@@ -25,6 +25,7 @@ import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.util.StringUtils;
+import org.joml.Matrix4fStack;
 
 public class BlockEditSet
 {
@@ -250,7 +251,7 @@ public class BlockEditSet
         }
     }
 
-    public synchronized void drawOutlines(MatrixStack matrices)
+    public synchronized void drawOutlines(Matrix4fStack matrices)
     {
         if (Configs.Outlines.OUTLINE_SHOWN.getBooleanValue())
         {
@@ -266,15 +267,17 @@ public class BlockEditSet
         if (Configs.Edits.VECTOR_SHOWN.getBooleanValue())
         {
             Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder buffer = tessellator.getBuffer();
-            RenderUtils.startDrawingLines(buffer);
+            BufferBuilder buffer = RenderUtils.startDrawingLines(tessellator);
             int nextColorIndex1 = 0;
             for (PlayereditSet editsForPlayer : playerEdits.values())
             {
                 editsForPlayer.drawVectors(OverlayRenderer.KELLY_COLORS[nextColorIndex1], buffer);
                 nextColorIndex1 = (nextColorIndex1 + 1) % OverlayRenderer.KELLY_COLORS.length;
             }
-            tessellator.draw();
+            BuiltBuffer builtBuffer = buffer.endNullable();
+            if(builtBuffer == null)
+                return;
+            BufferRenderer.drawWithGlobalProgram(builtBuffer);
         }
     }
 

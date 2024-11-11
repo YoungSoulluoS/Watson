@@ -1,5 +1,6 @@
 package eu.minemania.watson.network.ledger;
 
+/*
 import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class PluginPurgePacketHandler
 {
-    public static final Identifier CHANNEL = new Identifier("ledger:purge");
+    public static final Identifier CHANNEL = Identifier.of("ledger:purge");
 
     public static final PluginPurgePacketHandler INSTANCE = new PluginPurgePacketHandler();
 
@@ -56,3 +57,4 @@ public class PluginPurgePacketHandler
         }
     }
 }
+*/

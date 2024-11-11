@@ -1,5 +1,6 @@
 package eu.minemania.watson.network.ledger;
 
+/*
 import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
@@ -13,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class PluginInspectPacketHandler
 {
-    public static final Identifier CHANNEL = new Identifier("ledger:inspect");
+    public static final Identifier CHANNEL = Identifier.of("ledger:inspect");
 
     public static final PluginInspectPacketHandler INSTANCE = new PluginInspectPacketHandler();
 
@@ -45,3 +46,4 @@ public class PluginInspectPacketHandler
         }
     }
 }
+*/

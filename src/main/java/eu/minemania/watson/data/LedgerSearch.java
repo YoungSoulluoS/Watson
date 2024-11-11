@@ -1,5 +1,6 @@
 package eu.minemania.watson.data;
 
+/*
 import eu.minemania.watson.gui.GuiLedger.ButtonListenerRolledback.RolledbackMode;
 import java.util.List;
 
@@ -195,3 +196,4 @@ public class LedgerSearch
         return search.toString().strip();
     }
 }
+*/

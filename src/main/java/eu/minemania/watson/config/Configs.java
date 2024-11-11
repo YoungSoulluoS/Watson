@@ -311,12 +311,12 @@ public class Configs implements IConfigHandler
 
         for (String name : DataManager.getAllItemEntitiesStringIdentifiers())
         {
-            Optional<Block> optionalBlock = Registries.BLOCK.getOrEmpty(new Identifier(name));
-            Optional<Item> optionalItem = Registries.ITEM.getOrEmpty(optionalBlock.map(block -> Registries.ITEM.getId(block.asItem())).orElseGet(() -> new Identifier(name)));
+            Optional<Block> optionalBlock = Registries.BLOCK.getOrEmpty(Identifier.of(name));
+            Optional<Item> optionalItem = Registries.ITEM.getOrEmpty(optionalBlock.map(block -> Registries.ITEM.getId(block.asItem())).orElseGet(() -> Identifier.of(name)));
 
             if (optionalItem.isEmpty())
             {
-                color = setCustomColorOres(Registries.ENTITY_TYPE.get(new Identifier(name)));
+                color = setCustomColorOres(Registries.ENTITY_TYPE.get(Identifier.of(name)));
             }
             if (color.isEmpty() && optionalItem.isPresent())
             {

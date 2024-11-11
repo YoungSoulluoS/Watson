@@ -86,7 +86,7 @@ public class GuiMainMenu extends GuiBase
                 }
                 case MAIN_MENU -> gui = new GuiMainMenu();
                 case PLAYEREDIT_LOADED -> gui = new GuiPlayereditLoadedList();
-                case LEDGER_MENU -> gui = new GuiLedger();
+                //case LEDGER_MENU -> gui = new GuiLedger();
             }
 
             if (gui != null)

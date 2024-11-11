@@ -19,7 +19,7 @@ import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.Filters;
-import eu.minemania.watson.db.LedgerInfo;
+//import eu.minemania.watson.db.LedgerInfo;
 import eu.minemania.watson.db.TimeStamp;
 import eu.minemania.watson.gui.GuiConfigs.ConfigGuiTab;
 import eu.minemania.watson.selection.EditSelection;
@@ -50,7 +50,7 @@ public class DataManager implements IDirectoryCache
     private static long clientTickStart;
     private static String worldName = "";
     private static String ledgerVersion = "";
-    private static LedgerInfo ledgerInfo;
+    //private static LedgerInfo ledgerInfo;
     private static final ArrayList<String> ledgerActions = new ArrayList<>();
 
     private final EditSelection editselection = new EditSelection();
@@ -630,7 +630,7 @@ public class DataManager implements IDirectoryCache
         return deDupTags;
     }
 
-    public static void setLedgerInfo(LedgerInfo ledgerInfo)
+    /*public static void setLedgerInfo(LedgerInfo ledgerInfo)
     {
         DataManager.ledgerInfo = ledgerInfo;
     }
@@ -638,5 +638,5 @@ public class DataManager implements IDirectoryCache
     public static LedgerInfo getLedgerInfo()
     {
         return ledgerInfo;
-    }
+    }*/
 }

@@ -1,5 +1,6 @@
 package eu.minemania.watson.network.ledger;
 
+/*
 import com.google.common.base.Charsets;
 import eu.minemania.watson.network.IPluginChannelHandlerExtended;
 import fi.dy.masa.malilib.gui.Message;
@@ -9,7 +10,7 @@ import net.minecraft.util.Identifier;
 
 public class PluginResponsePacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final Identifier CHANNEL = new Identifier("ledger:response");
+    public static final Identifier CHANNEL = Identifier.of("ledger:response");
 
     public static final PluginResponsePacketHandler INSTANCE = new PluginResponsePacketHandler();
 
@@ -79,3 +80,4 @@ public class PluginResponsePacketHandler implements IPluginChannelHandlerExtende
         return null;
     }
 }
+*/

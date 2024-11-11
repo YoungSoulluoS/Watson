@@ -1,5 +1,6 @@
 package eu.minemania.watson.network.ledger;
 
+/*
 import com.google.common.base.Charsets;
 import eu.minemania.watson.Reference;
 import eu.minemania.watson.Watson;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final Identifier CHANNEL = new Identifier("ledger:handshake");
+    public static final Identifier CHANNEL = Identifier.of("ledger:handshake");
 
     public static final PluginHandshakePacketHandler INSTANCE = new PluginHandshakePacketHandler();
 
@@ -87,3 +88,4 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
         return packetByteBuf;
     }
 }
+*/

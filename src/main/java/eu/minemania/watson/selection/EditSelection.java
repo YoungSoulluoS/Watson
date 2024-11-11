@@ -10,6 +10,8 @@ import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.render.RenderUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.render.BufferRenderer;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -87,7 +89,7 @@ public class EditSelection
 
     public void selectPosition(int x, int y, int z, String world, int amount)
     {
-        if (_selection == null || _selection.x != x || _selection.y != y || _selection.z != z || !_selection.world.equals(world) || _selection.amount != amount)
+        if (_selection == null || _selection.world == null || _selection.x != x || _selection.y != y || _selection.z != z || !_selection.world.equals(world) || _selection.amount != amount)
         {
             _selection = new BlockEdit(0, "", "selection", x, y, z, null, world, amount);
         }
@@ -131,32 +133,31 @@ public class EditSelection
         if (_selection != null && Configs.Edits.SELECTION_SHOWN.getBooleanValue() && (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(_selection.world)))
         {
             Tessellator tesselator = Tessellator.getInstance();
-            BufferBuilder buffer = tesselator.getBuffer();
-            RenderUtils.startDrawingLines(buffer);
+            BufferBuilder buffer = RenderUtils.startDrawingLines(tesselator);
             RenderSystem.lineWidth(4.0F);
 
             final float halfSize = 0.3f;
             float x = _selection.x + 0.5f;
             float y = _selection.y + 0.5f;
             float z = _selection.z + 0.5f;
-            buffer.vertex(x - halfSize, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
-            buffer.vertex(x + halfSize, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
-            buffer.vertex(x, y - halfSize, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
-            buffer.vertex(x, y + halfSize, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
-            buffer.vertex(x, y, z - halfSize).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
-            buffer.vertex(x, y, z + halfSize).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
-            tesselator.draw();
+            buffer.vertex(x - halfSize, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0);
+            buffer.vertex(x + halfSize, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0);
+            buffer.vertex(x, y - halfSize, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0);
+            buffer.vertex(x, y + halfSize, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0);
+            buffer.vertex(x, y, z - halfSize).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0);
+            buffer.vertex(x, y, z + halfSize).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0);
+            BufferRenderer.drawWithGlobalProgram(buffer.end());
 
             if (_selection.playereditSet != null)
             {
                 BlockEdit previous = _selection.playereditSet.getEditBefore(_selection);
                 if (previous != null)
                 {
-                    RenderUtils.startDrawingLines(buffer);
+                    buffer = RenderUtils.startDrawingLines(tesselator);
                     RenderSystem.lineWidth(3.0F);
-                    buffer.vertex(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
-                    buffer.vertex(x, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
-                    tesselator.draw();
+                    buffer.vertex(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0);
+                    buffer.vertex(x, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0);
+                    BufferRenderer.drawWithGlobalProgram(buffer.end());
                 }
             }
         }

@@ -1,6 +1,6 @@
 package eu.minemania.watson.network.ledger;
 
-import com.google.common.base.Charsets;
+/*import com.google.common.base.Charsets;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final Identifier CHANNEL = new Identifier("ledger:action");
+    public static final Identifier CHANNEL = Identifier.of("ledger:action");
 
     public static final PluginActionPacketHandler INSTANCE = new PluginActionPacketHandler();
 
@@ -113,4 +113,4 @@ public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
     {
         return null;
     }
-}
+}*/

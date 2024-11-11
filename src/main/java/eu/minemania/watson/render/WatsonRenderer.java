@@ -12,6 +12,7 @@ import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Matrix4fStack;
 
 public class WatsonRenderer
 {
@@ -37,8 +38,8 @@ public class WatsonRenderer
             BackgroundRenderer.clearFog();
             EditSelection selection = DataManager.getEditSelection();
             BlockEditSet edits = selection.getBlockEditSet();
-            MatrixStack matrixStack = RenderSystem.getModelViewStack();
-            matrixStack.push();
+            Matrix4fStack matrixStack = RenderSystem.getModelViewStack();
+            matrixStack.pushMatrix();
             RenderSystem.disableCull();
 
             RenderUtils.setupBlend();
@@ -50,7 +51,7 @@ public class WatsonRenderer
 
             Vec3d cameraPos = this.mc.gameRenderer.getCamera().getPos();
 
-            matrixStack.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
+            matrixStack.translate((float) -cameraPos.getX(), (float) -cameraPos.getY(), (float) -cameraPos.getZ());
             RenderSystem.applyModelViewMatrix();
             edits.drawOutlines(matrixStack);
             edits.drawVectors();
@@ -63,7 +64,7 @@ public class WatsonRenderer
 
             RenderSystem.enableCull();
 
-            matrixStack.pop();
+            matrixStack.popMatrix();
             RenderSystem.setShaderFogStart(fogStart);
             this.mc.getProfiler().pop();
         }
