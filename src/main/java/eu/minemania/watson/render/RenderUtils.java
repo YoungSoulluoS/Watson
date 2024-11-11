@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.util.Color4f;
 import fi.dy.masa.malilib.util.PositionUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
@@ -19,7 +20,7 @@ public class RenderUtils
 
     public static BufferBuilder startDrawingLines(Tessellator tessellator)
     {
-        RenderSystem.setShader(GameRenderer::getRenderTypeLinesProgram);
+        RenderSystem.setShader(ShaderProgramKeys.RENDERTYPE_LINES);
         return tessellator.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
     }
 

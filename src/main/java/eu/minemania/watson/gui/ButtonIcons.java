@@ -3,6 +3,7 @@ package eu.minemania.watson.gui;
 import eu.minemania.watson.Reference;
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.render.RenderUtils;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 public enum ButtonIcons implements IGuiIcon
@@ -49,7 +50,7 @@ public enum ButtonIcons implements IGuiIcon
     }
 
     @Override
-    public void renderAt(int x, int y, float zLevel, boolean enabled, boolean selected)
+    public void renderAt(int x, int y, float zLevel, boolean enabled, boolean selected, DrawContext drawContext)
     {
         int u = this.u;
 

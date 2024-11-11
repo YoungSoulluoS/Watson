@@ -311,8 +311,8 @@ public class Configs implements IConfigHandler
 
         for (String name : DataManager.getAllItemEntitiesStringIdentifiers())
         {
-            Optional<Block> optionalBlock = Registries.BLOCK.getOrEmpty(Identifier.of(name));
-            Optional<Item> optionalItem = Registries.ITEM.getOrEmpty(optionalBlock.map(block -> Registries.ITEM.getId(block.asItem())).orElseGet(() -> Identifier.of(name)));
+            Optional<Block> optionalBlock = Registries.BLOCK.getOptionalValue(Identifier.of(name));
+            Optional<Item> optionalItem = Registries.ITEM.getOptionalValue(optionalBlock.map(block -> Registries.ITEM.getId(block.asItem())).orElseGet(() -> Identifier.of(name)));
 
             if (optionalItem.isEmpty())
             {
