@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.selection.PlayereditUtils;
 import fi.dy.masa.malilib.gui.GuiBase;
@@ -186,7 +185,6 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             {
                 matrixStack.push();
                 matrixStack.translate(0, 0, 200);
-                RenderSystem.applyModelViewMatrix();
                 String header = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]);
                 int w1 = this.getStringWidth(header);
                 int w2 = this.width - 100;
@@ -227,7 +225,6 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
                 }
                 matrixStack.push();
                 matrixStack.translate(0, 0, 200);
-                RenderSystem.applyModelViewMatrix();
                 int w1 = 0;
                 int w2 = 0;
                 for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())

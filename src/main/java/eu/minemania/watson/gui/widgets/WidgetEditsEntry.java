@@ -229,7 +229,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
                 this.drawString(x5, y, color, this.header5, drawContext);
                 this.drawString(x6, y, color, this.header6, drawContext);
 
-                this.renderColumnHeader(mouseX, mouseY, Icons.ARROW_DOWN, Icons.ARROW_UP);
+                this.renderColumnHeader(mouseX, mouseY, Icons.ARROW_DOWN, Icons.ARROW_UP, drawContext);
             }
         }
         else if (this.entry != null)
@@ -265,7 +265,6 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         {
             matrixStack.push();
             matrixStack.translate(0, 0, 200);
-            RenderSystem.applyModelViewMatrix();
 
             String header1 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[0]);
             String header2 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]);
@@ -337,7 +336,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             if (this.type == ButtonType.BLOCKS)
             {
                 EditListBlockedit editList = new EditListBlockedit(this.entry.getBlocks(), true);
-                GuiBase.openGui(new GuiBlockeditData(editList, this.entry.getStack().getTranslationKey(), listWidget.getGuiParent()));
+                GuiBase.openGui(new GuiBlockeditData(editList, this.entry.getStack().getItem().getTranslationKey(), listWidget.getGuiParent()));
             }
         }
 

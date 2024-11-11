@@ -299,6 +299,7 @@ public class TimeStamp
         WST("GMT+13"),
         YAKST("GMT+10"),
         YEKST("GMT+6"),
+        YEKT("GMT+5"),
         MSK("GMT+3");
 
         private final String offset;

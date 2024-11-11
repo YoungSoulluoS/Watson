@@ -11,7 +11,6 @@ import eu.minemania.watson.render.RenderUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.render.BufferRenderer;
-import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -313,14 +312,14 @@ class ReplayThread implements Runnable {
                 double randX = MathHelper.clamp(edit.x + player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
                 double randY = MathHelper.clamp(edit.y + (double) (player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
                 double randZ = MathHelper.clamp(edit.z + player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
-                player.startFallFlying();
+                player.startGliding();
                 networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                 Teleport.teleport(randX, randY, randZ, edit.world);
                 Thread.sleep(50L);
                 player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
-                networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(player.getYaw(), player.getPitch(), false));
+                networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(player.getYaw(), player.getPitch(), player.horizontalCollision, false));
                 editSelection.selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
-                player.stopFallFlying();
+                player.stopGliding();
                 networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                 Thread.sleep((long) (10000L / speed) - 50L);
             }

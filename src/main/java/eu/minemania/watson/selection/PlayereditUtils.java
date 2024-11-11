@@ -25,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registries;
 
@@ -202,7 +203,7 @@ public class PlayereditUtils
                 {
                     return new ItemStack(Items.TNT_MINECART);
                 }
-                else if (entity.equals(EntityType.BOAT))
+                else if (entity.isIn(EntityTypeTags.BOAT))
                 {
                     return new ItemStack(Items.OAK_BOAT);
                 }

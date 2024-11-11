@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.client.Paginator;
+import eu.minemania.watson.compat.ChatPatches;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
@@ -114,7 +115,12 @@ public class CoreProtectAnalysis extends Analysis
     void details(MutableText chat, Matcher m)
     {
         _lookupDetails = false;
-        HoverEvent hover = chat.getSiblings().get(0).getStyle().getHoverEvent();
+        HoverEvent hover;
+        if (ChatPatches.IS_INSTALLED) {
+            hover = chat.getSiblings().get(1).getSiblings().get(0).getStyle().getHoverEvent();
+        } else {
+            hover = chat.getSiblings().get(0).getStyle().getHoverEvent();
+        }
         if (hover != null && hover.getValue(hover.getAction()) != null)
         {
             String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");

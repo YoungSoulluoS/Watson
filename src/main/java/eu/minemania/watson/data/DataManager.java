@@ -615,9 +615,9 @@ public class DataManager implements IDirectoryCache
         ArrayList<String> tags = new ArrayList<>();
         ArrayList<String> deDupTags = new ArrayList<>();
 
-        Registries.BLOCK.streamTags().forEach((block) -> tags.add("#"+block.id().toString()));
-        Registries.ENTITY_TYPE.streamTags().forEach((entity) -> tags.add("#"+entity.id().toString()));
-        Registries.ITEM.streamTags().forEach((item) -> tags.add("#"+item.id().toString()));
+        Registries.BLOCK.streamTags().forEach((block) -> tags.add("#"+block.getTag().id().toString()));
+        Registries.ENTITY_TYPE.streamTags().forEach((entity) -> tags.add("#"+entity.getTag().id().toString()));
+        Registries.ITEM.streamTags().forEach((item) -> tags.add("#"+item.getTag().id().toString()));
 
         for (String tag : tags) {
             if (!deDupTags.contains(tag)) {
